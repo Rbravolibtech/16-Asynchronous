@@ -323,7 +323,7 @@ Promise.resolve('Resolved promise 2').then(res => {
 console.log('Test end');
 */
 /////////// BUILDING A SIMPLE PROMISE ////////////
-
+/*
 const lottery = new Promise(function (resolve, reject) {
   console.log('Lottery draw is happening');
 
@@ -376,3 +376,16 @@ wait(1)
 
 Promise.resolve('abc').then(x => console.log(x));
 Promise.reject(new Error('Problem!')).catch(x => console.error(x));
+*/
+/////////// PROMISIFYING THE GEOLOCATION API  ////////////
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(
+      position => resolve(position),
+      err => reject(err)
+    );
+  });
+};
+
+getPosition().then(pos => console.log(pos));
