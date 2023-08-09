@@ -43,6 +43,7 @@ getCountryData('mexico');
 getCountryData('Japan');
 */
 /////////// WELCOME TO CALLBACK HELL //////////////
+/*
 const renderCountry = function (data, className = '') {
   //COUNTRY PROPERTIES
   const flag = data.flags.svg;
@@ -105,3 +106,12 @@ const getCountryAndNeighbour = function (country) {
 };
 
 getCountryAndNeighbour('usa');
+*/
+/////////// PROMISES AND THE FETCH API //////////////
+
+// const request = new XMLHttpRequest();
+// request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+// request.send();
+
+const request = fetch('https://restcountries.com/v3.1/name/usa');
+console.log(request);
