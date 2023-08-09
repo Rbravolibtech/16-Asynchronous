@@ -3,23 +3,52 @@
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
+const renderCountry = function (data, className = '') {
+  //COUNTRY PROPERTIES
+  const flag = data.flags.svg;
+  const countryName = data.name.common;
+  const region = data.region;
+  const population = (data.population / 1000000).toFixed(2) + ' million ';
+  const language = Object.values(data.languages)[0];
+  const currency = Object.values(data.currencies)[0].name;
+  //HTML
+  const html = `
+          <article class="country ${className}">
+            <img class="country__img" src="${flag}" />
+            <div class="country__data">
+              <h3 class="country__name">${countryName}</h3>
+              <h4 class="country__region">${region}</h4>
+              <p class="country__row"><span>👫</span>${population} people</p>
+              <p class="country__row"><span>🗣️</span>${language}</p>
+              <p class="country__row"><span>💰</span>${currency}</p>
+            </div>
+          </article>`;
+
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  countriesContainer.style.opacity = 1;
+};
 ///////////////////////////////////////
 /*
-const getCountryData = function (country) {
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
-  request.send();
+// const getCountryData = function (country) {
+//   const request = new XMLHttpRequest();
+//   request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+//   request.send();
 
-  request.addEventListener('load', function () {
-    console.log('test');
+// request.addEventListener('load', function () {
+//   console.log('test');
 
-    const [data] = JSON.parse(this.responseText);
-    console.log(data.flag);
+const [data] = JSON.parse(this.responseText);
+console.log(data.flag);
 
-    const languages = Object.values(data.languages);
-    const currencies = Object.values(data.currencies);
+const languages = Object.values(data.languages);
+const currencies = Object.values(data.currencies);
 
-    const html = `
+const html = `
   <article class="country">
     <img class="country__img" src="${data.flags.svg}" />
     <div class="country__data">
@@ -33,55 +62,30 @@ const getCountryData = function (country) {
     </div>
   </article>
   `;
-    countriesContainer.insertAdjacentHTML('beforeend', html);
-    countriesContainer.style.opacity = 1;
-  });
-};
+countriesContainer.insertAdjacentHTML('beforeend', html);
+countriesContainer.style.opacity = 1;
+//});
+//};
 
 getCountryData('usa');
 getCountryData('mexico');
 getCountryData('Japan');
 */
 /////////// WELCOME TO CALLBACK HELL //////////////
+
+// const getCountryAndNeighbour = function (country) {
+//   //ajax call 1 for main country:
+//   const request = new XMLHttpRequest();
+//   request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+//   request.send();
+//   request.addEventListener('load', function () {
+//     //NOTE:responseText is actually string in JSON format.Converting js object:
+//     const [data] = JSON.parse(this.responseText);
+//     console.log(data);
+
+//     //render country:
+//     renderCountry(data);
 /*
-const renderCountry = function (data, className = '') {
-  //COUNTRY PROPERTIES
-  const flag = data.flags.svg;
-  const countryName = data.name.common;
-  const region = data.region;
-  const population = (data.population / 1000000).toFixed(2) + ' million ';
-  const language = Object.values(data.languages)[0];
-  const currency = Object.values(data.currencies)[0].name;
-  //HTML
-  const html = `
-        <article class="country ${className}">
-          <img class="country__img" src="${flag}" />
-          <div class="country__data">
-            <h3 class="country__name">${countryName}</h3>
-            <h4 class="country__region">${region}</h4>
-            <p class="country__row"><span>👫</span>${population} people</p>
-            <p class="country__row"><span>🗣️</span>${language}</p>
-            <p class="country__row"><span>💰</span>${currency}</p>
-          </div>
-        </article>`;
-
-  countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
-};
-
-const getCountryAndNeighbour = function (country) {
-  //ajax call 1 for main country:
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
-  request.send();
-  request.addEventListener('load', function () {
-    //NOTE:responseText is actually string in JSON format.Converting js object:
-    const [data] = JSON.parse(this.responseText);
-    console.log(data);
-
-    //render country:
-    renderCountry(data);
-
     //get neighbours:
     const neighbours = data.borders;
     if (!neighbours) return;
@@ -106,7 +110,7 @@ const getCountryAndNeighbour = function (country) {
 };
 
 getCountryAndNeighbour('usa');
-*/
+
 /////////// PROMISES AND THE FETCH API //////////////
 /*
 // const request = new XMLHttpRequest();
@@ -129,12 +133,6 @@ getCountryData('usa');
 
 /////////// CHAINING PROMISES //////////////
 
-// Define the renderCountry function
-const renderCountry = function (data, className = '') {
-  // Implement the rendering logic here
-};
-
-// Define the getCountryData function
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v3.1/name/${country}`)
     .then(response => response.json())
@@ -143,11 +141,22 @@ const getCountryData = function (country) {
       const neighbour = data[0].borders[0];
       if (!neighbour) return;
 
+      // COUNTRY 2
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
     })
     .then(response => response.json())
-    .then(data => renderCountry(data, 'neighbour'));
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      console.error(`${err} 💥💥💥`);
+      renderError(`Something went wrong 💥💥 ${err.message}. Try again!`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
 };
 
-// Call the getCountryData function
-getCountryData('usa');
+btn.addEventListener('click', function () {
+  getCountryData('usa');
+});
+
+getCountryData('el salvador');
