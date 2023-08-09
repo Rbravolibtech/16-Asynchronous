@@ -128,3 +128,26 @@ getCountryData('usa');
 */
 
 /////////// CHAINING PROMISES //////////////
+
+// Define the renderCountry function
+const renderCountry = function (data, className = '') {
+  // Implement the rendering logic here
+};
+
+// Define the getCountryData function
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => response.json())
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbour = data[0].borders[0];
+      if (!neighbour) return;
+
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data, 'neighbour'));
+};
+
+// Call the getCountryData function
+getCountryData('usa');
