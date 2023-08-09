@@ -108,10 +108,23 @@ const getCountryAndNeighbour = function (country) {
 getCountryAndNeighbour('usa');
 */
 /////////// PROMISES AND THE FETCH API //////////////
-
+/*
 // const request = new XMLHttpRequest();
 // request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
 // request.send();
 
 const request = fetch('https://restcountries.com/v3.1/name/usa');
 console.log(request);
+*/
+/////////// CONSUMING PROMISES //////////////
+/*
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
+};
+
+getCountryData('usa');
+*/
+
+/////////// CHAINING PROMISES //////////////
