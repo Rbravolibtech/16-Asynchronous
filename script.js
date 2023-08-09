@@ -457,7 +457,7 @@ createImage('img/img-1.jpg')
   .catch(err => console.error(err));
   */
 /////////// CONSUMING PROMISES WITH ASYNC/AWAIT ////////////
-
+/*
 const getPosition = function () {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -499,11 +499,15 @@ whereAmI('usa');
 whereAmI();
 whereAmI();
 console.log('FIRST');
+*/
 
-// try {
-//   let y = 1;
-//   const x = 2;
-//   y = 3;
-// } catch (err) {
-//   alert(err.message);
-// }
+/////////// ERROR HANDLING WITH TRY ......CATCH ////////////
+/*
+try {
+  let y = 1;
+  const x = 2;
+  y = 3;
+} catch (err) {
+  alert(err.message);
+}
+*/
