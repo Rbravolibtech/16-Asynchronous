@@ -295,7 +295,7 @@ GOOD LUCK 😀
 //       console.log(data);
 //       console.log(`You are in ${data.city}, ${data.country}`);
 
-//       return fetch(`https://restcountries.eu/rest/v2/name/${data.country}`);
+//       return fetch(`https://restcountries.com/v3.1/name/${country}`);
 //     })
 //     .then(res => {
 //       if (!res.ok) throw new Error(`Country not found (${res.status})`);
@@ -464,7 +464,7 @@ const getPosition = function () {
   });
 };
 
-// fetch(`https://restcountries.eu/rest/v2/name/${country}`).then(res => console.log(res))
+// fetch(`https://restcountries.com/v3.1/name/${country}`).then(res => console.log(res))
 
 const whereAmI = async function () {
   try {
@@ -511,3 +511,20 @@ try {
   alert(err.message);
 }
 */
+/////////// RUNNING VALUES FROM ASYNC FUNCTIONS ////////////
+
+const get3Countries = async function (c1, c2, c3) {
+  try {
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+    ]);
+    console.log(data.map(d => d[0].capital));
+  } catch (err) {
+    console.error(err);
+  }
+};
+get3Countries('usa', 'canada', 'mexico');
+
+/////////// RUNNING PROMISES IN PARALLEL  ////////////
